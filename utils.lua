@@ -23,10 +23,16 @@ d.logService = cloneref(game:GetService("LogService"))
 
 -- anticheat stuff
 
+for i,v in getconnections(d.logService.) do
+    if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then -- if it comes from executor then leave it alone
+        v:Disable()
+    end
+end
 
 for i,v in getconnections(d.scriptContext.Error) do
-    print(v, typeof(v), v.Function)
-    print(isexecutorclosure(v.Function))
+    if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then -- if it comes from executor then leave it alone
+        v:Disable()
+    end
 end
 
 -- ac end
