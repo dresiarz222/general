@@ -1,26 +1,47 @@
+-- Hello and welcome to my globals list :)
+
 -- COMPATIBILITY
+
 local doNothing = function() end
-local dummyReturnFuncFunc = function(...)
-    return function(...) end
-end
+local dummyReturnFuncFunc = function() return function() end end
 local dummyfunc = function(...) return ... end
+local dummyReturnTableFunc = function() return {} end
 local clonefunction = clonefunction or dummyfunc
 local cloneref = clonefunction(cloneref) or dummyfunc
-local getgenv = clonefunction(getgenv) or {}
-local getconnections = clonefunction(getconnections) or function(...) return {} end
+local getgenv = clonefunction(getgenv) or dummyReturnTableFunc
+local getconnections = clonefunction(getconnections) or dummyReturnTableFunc
 local hookfunction = clonefunction(hookfunction) or dummyReturnFuncFunc
 local hookmetamethod = clonefunction(hookmetamethod) or dummyReturnFuncFunc
+local getfenv = clonefunction(getfenv) or dummyReturnTableFunc
+local scriptContext:ScriptContext = cloneref(game:GetService("ScriptContext"))
 
 -- COMPATIBILITY END
 
 local logService:LogService = cloneref(game:GetService("LogService"))
 
-local plrs:Players = cloneref(game:GetService("Players"))
-local plr:Player = cloneref(plrs.LocalPlayer)
+-- anticheat stuff
+
+for i,v in getconnections(logService.MessageOut) do
+    xpcall(function()
+        v:Disable()
+    end,warn(...))
+end
+
+for i,v in getconnections(scriptContext.Error) do
+    xpcall(function()
+        v:Disable()
+    end,warn(...))
+end
+
+-- ac end
 
 local d = {}
 
+local plrs:Players = cloneref(game:GetService("Players"))
+local plr:Player = cloneref(plrs.LocalPlayer)
+
 local _ = Instance.new("ScreenGui").AbsoluteSize
+
 local screenX = _.X
 local screenY = _.Y
 
@@ -49,6 +70,7 @@ function d:antiAfk()
             end, function(...)
                 warn("antiafk 2 fail", ...)
             end)
+
         end
     end)
 
@@ -72,6 +94,12 @@ function d:getPos()
     return r
 end
 
-xpcall(d.antiAfk,function(...)
+xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
+
+for i,v in getfenv() do
+    print(i, v, typeof(v))
+end
+
+return d
