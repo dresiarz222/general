@@ -21,27 +21,30 @@ local logService:LogService = cloneref(game:GetService("LogService"))
 
 -- anticheat stuff
 
+--[[
 for i,v in getconnections(scriptContext.Error) do
     xpcall(function()
         v:Disable()
     end,warn)
 end
+]]---
+
 
 -- ac end
 
 local d = {}
 
-local plrs:Players = cloneref(game:GetService("Players"))
-local plr:Player = cloneref(plrs.LocalPlayer)
+d.plrs = cloneref(game:GetService("Players"))
+d.plr = cloneref(d.plrs.LocalPlayer)
 
 local _ = Instance.new("ScreenGui").AbsoluteSize
 
-local screenX = _.X
-local screenY = _.Y
+d.screenX = _.X
+d.screenY = _.Y
 
 function d:antiAfk()
 
-    for _,connection:RBXScriptConnection in getconnections(plr.Idled) do
+    for _,connection:RBXScriptConnection in getconnections(d.plr.Idled) do
         connection:Disable()
     end
 
@@ -52,15 +55,15 @@ function d:antiAfk()
             
             xpcall(function()
                 vu:CaptureController()
-                vu:ClickButton2(Vector2.new(math.random(0,screenX),math.random(0,screenY)))
+                vu:ClickButton2(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)))
             end, function(...)
                 warn("antiafk 1 fail", ...)
             end)
     
             xpcall(function()
-                vu:Button2Down(Vector2.new(math.random(0,screenX),math.random(0,screenY)),workspace.CurrentCamera.CFrame)
+                vu:Button2Down(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)),workspace.CurrentCamera.CFrame)
                 task.wait(1)
-                vu:Button2Up(Vector2.new(math.random(0,screenX),math.random(0,screenY)),workspace.CurrentCamera.CFrame)
+                vu:Button2Up(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)),workspace.CurrentCamera.CFrame)
             end, function(...)
                 warn("antiafk 2 fail", ...)
             end)
@@ -79,21 +82,17 @@ function d:setPos(pos: CFrame | Vector3)
         pos = CFrame.new(pos)
     end
     local s
-    repeat task.wait() s = pcall(function() plr.Character.PrimaryPart.CFrame = pos end) until s
+    repeat task.wait() s = pcall(function() d.plr.Character.PrimaryPart.CFrame = pos end) until s
 end
 
 function d:getPos()
     local s, r
-    repeat task.wait() s, r = pcall(function() return plr.Character.PrimaryPart.CFrame end) until s and r
+    repeat task.wait() s, r = pcall(function() return d.plr.Character.PrimaryPart.CFrame end) until s and r
     return r
 end
 
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
-
-for i,v in getfenv() do
-    print(i, v, typeof(v))
-end
 
 return d
