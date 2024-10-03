@@ -39,13 +39,13 @@ d.logService = cloneref(game:GetService("LogService"))
 -- anticheat stuff
 
 for i,v in getconnections(d.logService.MessageOut) do
-    if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then -- if it comes from executor then leave it alone
+    if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then -- if connection comes from executor then leave it alone
         v:Disable()
     end
 end
 
 for i,v in getconnections(d.scriptContext.Error) do
-    if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then -- if it comes from executor then leave it alone
+    if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then
         v:Disable()
     end
 end
@@ -113,8 +113,4 @@ xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
 
-for i,v in d do
-    print(i, v)
-end
-
-return d
+return d -- for loadstring :)
