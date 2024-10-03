@@ -92,7 +92,7 @@ end
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
 
-d.screenX = 1920 -- hardcoded cuz screengui absolute size was fked up
+d.screenX = 1920 -- hardcoded cuz screengui absolute size was fking up
 d.screenY = 1080
 
 function d.antiAfk()
