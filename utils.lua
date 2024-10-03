@@ -24,13 +24,13 @@ local logService:LogService = cloneref(game:GetService("LogService"))
 for i,v in getconnections(logService.MessageOut) do
     xpcall(function()
         v:Disable()
-    end,warn(...))
+    end,warn)
 end
 
 for i,v in getconnections(scriptContext.Error) do
     xpcall(function()
         v:Disable()
-    end,warn(...))
+    end,warn)
 end
 
 -- ac end
