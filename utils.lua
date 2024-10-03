@@ -43,6 +43,8 @@ d.mouse = d.plr:GetMouse()
 d.screenX = d.mouse.ViewSizeX -- hardcoded cuz screengui absolute size was fking up
 d.screenY = d.mouse.ViewSizeY
 
+print(d.screenX, d.screenY)
+
 local guiParent
 
 function d.gethui() -- for dtc shitsploits that lack gethui() or have no coregui access
