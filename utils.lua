@@ -9,6 +9,7 @@ type globals = {
     rs : ReplicatedStorage,
     rf : ReplicatedFirst,
     vim : VirtualInputManager,
+    vu : VirtualUser,
 }
 
 local d : globals = {} -- for roblox lsp code auto complete
@@ -55,21 +56,19 @@ end
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
 
-local _ = Instance.new("ScreenGui").AbsoluteSize
-
-d.screenX = _.X
-d.screenY = _.Y
+d.screenX = 1920 -- hardcoded cuz screengui absolute size was fked up
+d.screenY = 1080
 
 function d:antiAfk()
 
-    for _,connection:RBXScriptConnection in getconnections(d.plr.Idled) do
+    for _,connection in getconnections(d.plr.Idled) do
         connection:Disable()
     end
 
     local vu:VirtualUser = cloneref(game:GetService("VirtualUser"))
 
     task.spawn(function()
-        while task.wait(math.random(1,6)*100) do
+        while task.wait(math.random(1,6)*10) do
             
             xpcall(function()
                 vu:CaptureController()
@@ -112,5 +111,9 @@ end
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
+
+d.hookfunction(print,warn)
+
+print("test")
 
 return d -- for loadstring :)
