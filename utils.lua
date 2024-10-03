@@ -90,7 +90,7 @@ function d.gethui() -- for dtc shitsploits that lack gethui() or have no coregui
         return r
     end
 
-    guiParent = d.plr.PlayerGui
+    guiParent = d.plr.PlayerGui -- no coregui access means playergui is last resort, dtc asf 😔
 
     return guiParent
 
