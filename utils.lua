@@ -15,27 +15,49 @@ type globals = {
 local d : globals = {} -- for roblox lsp code auto complete
 
 d.doNothing = function() end
-d.dummyReturnFuncFunc = function() return function() end end
+d.returnDummyFuncFunc = function() return function() end end
 d.dummyfunc = function(...) return ... end
-d.dummyReturnTableFunc = function() return {} end
+d.returnDummyTableFunc = function() return {} end
 
 -- COMPATIBILITY
 
-d.getgenv = getgenv or d.dummyReturnTableFunc
-d.clonefunction = d.getgenv().clonefunction or d.dummyReturnFuncFunc
-d.cloneref = clonefunction(d.getgenv().cloneref) or d.dummyfunc
-d.getconnections = clonefunction(d.getgenv().getconnections) or d.dummyReturnTableFunc
-d.hookfunction = clonefunction(d.getgenv().hookfunction) or d.dummyReturnFuncFunc
-d.hookmetamethod = clonefunction(d.getgenv().hookmetamethod) or d.dummyReturnFuncFunc
+d.getgenv = getgenv or d.returnDummyTableFunc
+d.clonefunction = clonefunction or d.returnDummyFuncFunc
+d.cloneref = clonefunction(cloneref) or d.dummyfunc
+d.getconnections = clonefunction(getconnections) or d.returnDummyTableFunc
+d.hookfunction = clonefunction(hookfunction) or d.returnDummyFuncFunc
+d.hookmetamethod = clonefunction(hookmetamethod) or d.returnDummyFuncFunc
 d.scriptContext = cloneref(game:GetService("ScriptContext"))
-d.isexecutorclosure = clonefunction(d.getgenv().isexecutorclosure)
+d.isexecutorclosure = clonefunction(isexecutorclosure)
 d.uis = cloneref(game:GetService("UserInputService"))
 d.rs = cloneref(game:GetService("ReplicatedStorage"))
 d.rf = cloneref(game:GetService("ReplicatedFirst"))
 d.vim = cloneref(game:GetService("VirtualInputManager"))
+d.logService = cloneref(game:GetService("LogService"))
+
+function d:gethui() -- for dtc shitsploits that lack gethui() or have no coregui access
+    
+    local s,r = pcall(function()
+        return gethui()
+    end)
+    
+    if s and r then
+        return r
+    end
+
+    local s,r = pcall(function()
+        return game:GetService("CoreGui")
+    end)
+
+    if s and r then
+        return r
+    end
+
+    return d.plr.PlayerGui
+
+end
 
 -- COMPATIBILITY END
-d.logService = cloneref(game:GetService("LogService"))
 
 -- anticheat stuff
 
