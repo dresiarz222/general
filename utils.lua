@@ -41,7 +41,7 @@ d.logService = cloneref(game:GetService("LogService"))
 
 local guiParent
 
-function d:gethui() -- for dtc shitsploits that lack gethui() or have no coregui access
+function d.gethui() -- for dtc shitsploits that lack gethui() or have no coregui access
     
     if guiParent then
         return guiParent
