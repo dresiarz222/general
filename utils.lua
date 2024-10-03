@@ -40,10 +40,24 @@ d.logService = cloneref(game:GetService("LogService"))
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
 d.mouse = d.plr:GetMouse()
-d.screenX = d.mouse.ViewSizeX -- hardcoded cuz screengui absolute size was fking up
+d.screenX = d.mouse.ViewSizeX
 d.screenY = d.mouse.ViewSizeY
 
-print(d.screenX, d.screenY)
+-- console metrics stuff
+
+for i,v in getconnections(d.logService.MessageOut) do
+    if v.Function or (v.Function and not d.isexecutorclosure(v.Function)) then -- if connection comes from executor then leave it alone
+        v:Disable()
+    end
+end
+
+for i,v in getconnections(d.scriptContext.Error) do
+    if v.Function or (v.Function and not d.isexecutorclosure(v.Function)) then
+        v:Disable()
+    end
+end
+
+-- console metrics end
 
 local guiParent
 
@@ -76,22 +90,6 @@ function d.gethui() -- for dtc shitsploits that lack gethui() or have no coregui
     return guiParent
 
 end
-
--- console metrics stuff
-
-for i,v in getconnections(d.logService.MessageOut) do
-    if v.Function or (v.Function and not d.isexecutorclosure(v.Function)) then -- if connection comes from executor then leave it alone
-        v:Disable()
-    end
-end
-
-for i,v in getconnections(d.scriptContext.Error) do
-    if v.Function or (v.Function and not d.isexecutorclosure(v.Function)) then
-        v:Disable()
-    end
-end
-
--- console metrics end
 
 function d.antiAfk()
 
