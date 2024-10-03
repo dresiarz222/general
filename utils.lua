@@ -14,6 +14,7 @@ type globals = {
     rf : ReplicatedFirst,
     vim : VirtualInputManager,
     vu : VirtualUser,
+    mouse : Mouse,
 }
 
 local d : globals = {} -- for roblox lsp code auto complete
@@ -38,8 +39,9 @@ d.vim = cloneref(game:GetService("VirtualInputManager"))
 d.logService = cloneref(game:GetService("LogService"))
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
-d.screenX = 1920 -- hardcoded cuz screengui absolute size was fking up
-d.screenY = 1080
+d.mouse = d.plr:GetMouse()
+d.screenX = d.mouse.ViewSizeX -- hardcoded cuz screengui absolute size was fking up
+d.screenY = d.mouse.ViewSizeY
 
 local guiParent
 
