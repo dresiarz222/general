@@ -23,7 +23,7 @@ d.logService = cloneref(game:GetService("LogService"))
 
 -- anticheat stuff
 
-for i,v in getconnections(d.logService.) do
+for i,v in getconnections(d.logService.MessageOut) do
     if v.Function or (v.Function and d.isexecutorclosure(v.Function)) then -- if it comes from executor then leave it alone
         v:Disable()
     end
