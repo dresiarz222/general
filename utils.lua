@@ -1,5 +1,9 @@
 -- Hello and welcome to my globals list :)
 
+while not game:IsLoaded() do
+    task.wait()
+end
+
 type globals = {
     logService : LogService,
     plrs : Players,
@@ -35,13 +39,20 @@ d.rf = cloneref(game:GetService("ReplicatedFirst"))
 d.vim = cloneref(game:GetService("VirtualInputManager"))
 d.logService = cloneref(game:GetService("LogService"))
 
+local guiParent
+
 function d:gethui() -- for dtc shitsploits that lack gethui() or have no coregui access
     
+    if guiParent then
+        return guiParent
+    end
+
     local s,r = pcall(function()
         return gethui()
     end)
     
     if s and r then
+        guiParent = r
         return r
     end
 
@@ -50,10 +61,13 @@ function d:gethui() -- for dtc shitsploits that lack gethui() or have no coregui
     end)
 
     if s and r then
+        guiParent = r
         return r
     end
 
-    return d.plr.PlayerGui
+    guiParent = d.plr.PlayerGui
+
+    return guiParent
 
 end
 
@@ -81,7 +95,7 @@ d.plr = cloneref(d.plrs.LocalPlayer)
 d.screenX = 1920 -- hardcoded cuz screengui absolute size was fked up
 d.screenY = 1080
 
-function d:antiAfk()
+function d.antiAfk()
 
     for _,connection in getconnections(d.plr.Idled) do
         connection:Disable()
@@ -112,7 +126,7 @@ function d:antiAfk()
 
 end
 
-function d:distance(pos1,pos2)
+function d.distance(pos1,pos2)
     return (pos2-pos1).Magnitude
 end
 
@@ -124,7 +138,7 @@ function d:setPos(pos: CFrame | Vector3)
     repeat task.wait() s = pcall(function() d.plr.Character.PrimaryPart.CFrame = pos end) until s
 end
 
-function d:getPos()
+function d.getPos()
     local s, r
     repeat task.wait() s, r = pcall(function() return d.plr.Character.PrimaryPart.CFrame end) until s and r
     return r
@@ -133,9 +147,5 @@ end
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
-
-d.hookfunction(print,warn)
-
-print("test")
 
 return d -- for loadstring :)
