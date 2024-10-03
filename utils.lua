@@ -1,22 +1,37 @@
 -- Hello and welcome to my globals list :)
 
-local d = {}
+type globals = {
+    logService : LogService,
+    plrs : Players,
+    plr: Player,
+    scriptContext: ScriptContext,
+    uis : UserInputService,
+    rs : ReplicatedStorage,
+    rf : ReplicatedFirst,
+    vim : VirtualInputManager,
+}
+
+local d : globals = {} -- for roblox lsp code auto complete
+
+d.doNothing = function() end
+d.dummyReturnFuncFunc = function() return function() end end
+d.dummyfunc = function(...) return ... end
+d.dummyReturnTableFunc = function() return {} end
 
 -- COMPATIBILITY
 
-local doNothing = function() end
-local dummyReturnFuncFunc = function() return function() end end
-local dummyfunc = function(...) return ... end
-local dummyReturnTableFunc = function() return {} end
-
-d.getgenv = getgenv or dummyReturnTableFunc
-d.clonefunction = d.getgenv().clonefunction or dummyReturnFuncFunc
-d.cloneref = clonefunction(d.getgenv().cloneref) or dummyfunc
-d.getconnections = clonefunction(d.getgenv().getconnections) or dummyReturnTableFunc
-d.hookfunction = clonefunction(d.getgenv().hookfunction) or dummyReturnFuncFunc
-d.hookmetamethod = clonefunction(d.getgenv().hookmetamethod) or dummyReturnFuncFunc
+d.getgenv = getgenv or d.dummyReturnTableFunc
+d.clonefunction = d.getgenv().clonefunction or d.dummyReturnFuncFunc
+d.cloneref = clonefunction(d.getgenv().cloneref) or d.dummyfunc
+d.getconnections = clonefunction(d.getgenv().getconnections) or d.dummyReturnTableFunc
+d.hookfunction = clonefunction(d.getgenv().hookfunction) or d.dummyReturnFuncFunc
+d.hookmetamethod = clonefunction(d.getgenv().hookmetamethod) or d.dummyReturnFuncFunc
 d.scriptContext = cloneref(game:GetService("ScriptContext"))
 d.isexecutorclosure = clonefunction(d.getgenv().isexecutorclosure)
+d.uis = cloneref(game:GetService("UserInputService"))
+d.rs = cloneref(game:GetService("ReplicatedStorage"))
+d.rf = cloneref(game:GetService("ReplicatedFirst"))
+d.vim = cloneref(game:GetService("VirtualInputManager"))
 
 -- COMPATIBILITY END
 d.logService = cloneref(game:GetService("LogService"))
@@ -97,5 +112,9 @@ end
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
+
+for i,v in d do
+    print(i, v)
+end
 
 return d
