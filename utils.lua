@@ -130,7 +130,7 @@ function d.distance(pos1,pos2)
     return (pos2-pos1).Magnitude
 end
 
-function d:setPos(pos: CFrame | Vector3)
+function d.setPos(pos: CFrame | Vector3)
     if typeof(pos) == "Vector3" then
         pos = CFrame.new(pos)
     end
