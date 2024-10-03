@@ -65,22 +65,22 @@ function d:antiAfk()
         connection:Disable()
     end
 
-    local vu:VirtualUser = cloneref(game:GetService("VirtualUser"))
+    d.vu = cloneref(game:GetService("VirtualUser"))
 
     task.spawn(function()
         while task.wait(math.random(1,6)*10) do
             
             xpcall(function()
-                vu:CaptureController()
-                vu:ClickButton2(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)))
+                d.vu:CaptureController()
+                d.vu:ClickButton2(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)))
             end, function(...)
                 warn("antiafk 1 fail", ...)
             end)
     
             xpcall(function()
-                vu:Button2Down(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)),workspace.CurrentCamera.CFrame)
+                d.vu:Button2Down(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)),workspace.CurrentCamera.CFrame)
                 task.wait(1)
-                vu:Button2Up(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)),workspace.CurrentCamera.CFrame)
+                d.vu:Button2Up(Vector2.new(math.random(0,d.screenX),math.random(0,d.screenY)),workspace.CurrentCamera.CFrame)
             end, function(...)
                 warn("antiafk 2 fail", ...)
             end)
