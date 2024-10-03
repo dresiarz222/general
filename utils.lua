@@ -6,13 +6,13 @@ local doNothing = function() end
 local dummyReturnFuncFunc = function() return function() end end
 local dummyfunc = function(...) return ... end
 local dummyReturnTableFunc = function() return {} end
-local clonefunction = clonefunction or dummyfunc
-local cloneref = clonefunction(cloneref) or dummyfunc
+
 local getgenv = clonefunction(getgenv) or dummyReturnTableFunc
-local getconnections = clonefunction(getconnections) or dummyReturnTableFunc
-local hookfunction = clonefunction(hookfunction) or dummyReturnFuncFunc
-local hookmetamethod = clonefunction(hookmetamethod) or dummyReturnFuncFunc
-local getfenv = clonefunction(getfenv) or dummyReturnTableFunc
+local clonefunction = getgenv().clonefunction or dummyfunc
+local cloneref = clonefunction(getgenv().cloneref) or dummyfunc
+local getconnections = clonefunction(getgenv().getconnections) or dummyReturnTableFunc
+local hookfunction = clonefunction(getgenv().hookfunction) or dummyReturnFuncFunc
+local hookmetamethod = clonefunction(getgenv().hookmetamethod) or dummyReturnFuncFunc
 local scriptContext:ScriptContext = cloneref(game:GetService("ScriptContext"))
 
 -- COMPATIBILITY END
@@ -20,12 +20,6 @@ local scriptContext:ScriptContext = cloneref(game:GetService("ScriptContext"))
 local logService:LogService = cloneref(game:GetService("LogService"))
 
 -- anticheat stuff
-
-for i,v in getconnections(logService.MessageOut) do
-    xpcall(function()
-        v:Disable()
-    end,warn)
-end
 
 for i,v in getconnections(scriptContext.Error) do
     xpcall(function()
