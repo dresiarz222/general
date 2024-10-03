@@ -39,8 +39,12 @@ d.vim = cloneref(game:GetService("VirtualInputManager"))
 d.logService = cloneref(game:GetService("LogService"))
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
+
 d.mouse = d.plr:GetMouse()
-d.screenX = d.mouse.ViewSizeX -- hardcoded cuz screengui absolute size was fking up
+d.uis.MouseIconEnabled = true
+d.uis.MouseIcon = ""
+
+d.screenX = d.mouse.ViewSizeX
 d.screenY = d.mouse.ViewSizeY
 
 print(d.screenX, d.screenY)
