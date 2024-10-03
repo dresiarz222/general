@@ -1,5 +1,7 @@
 -- Hello and welcome to my globals list :)
 
+local d = {}
+
 -- COMPATIBILITY
 
 local doNothing = function() end
@@ -7,32 +9,27 @@ local dummyReturnFuncFunc = function() return function() end end
 local dummyfunc = function(...) return ... end
 local dummyReturnTableFunc = function() return {} end
 
-local getgenv = clonefunction(getgenv) or dummyReturnTableFunc
-local clonefunction = getgenv().clonefunction or dummyfunc
-local cloneref = clonefunction(getgenv().cloneref) or dummyfunc
-local getconnections = clonefunction(getgenv().getconnections) or dummyReturnTableFunc
-local hookfunction = clonefunction(getgenv().hookfunction) or dummyReturnFuncFunc
-local hookmetamethod = clonefunction(getgenv().hookmetamethod) or dummyReturnFuncFunc
-local scriptContext:ScriptContext = cloneref(game:GetService("ScriptContext"))
+d.getgenv = getgenv or dummyReturnTableFunc
+d.clonefunction = d.getgenv().clonefunction or dummyReturnFuncFunc
+d.cloneref = clonefunction(d.getgenv().cloneref) or dummyfunc
+d.getconnections = clonefunction(d.getgenv().getconnections) or dummyReturnTableFunc
+d.hookfunction = clonefunction(d.getgenv().hookfunction) or dummyReturnFuncFunc
+d.hookmetamethod = clonefunction(d.getgenv().hookmetamethod) or dummyReturnFuncFunc
+d.scriptContext = cloneref(game:GetService("ScriptContext"))
+d.isexecutorclosure = clonefunction(d.getgenv().isexecutorclosure)
 
 -- COMPATIBILITY END
-
-local logService:LogService = cloneref(game:GetService("LogService"))
+d.logService = cloneref(game:GetService("LogService"))
 
 -- anticheat stuff
 
---[[
-for i,v in getconnections(scriptContext.Error) do
-    xpcall(function()
-        v:Disable()
-    end,warn)
-end
-]]---
 
+for i,v in getconnections(d.scriptContext.Error) do
+    print(v, typeof(v), v.Function)
+    print(isexecutorclosure(v.Function))
+end
 
 -- ac end
-
-local d = {}
 
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
