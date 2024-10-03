@@ -23,8 +23,6 @@ d.returnDummyFuncFunc = function() return function() end end
 d.dummyfunc = function(...) return ... end
 d.returnDummyTableFunc = function() return {} end
 
--- COMPATIBILITY
-
 d.getgenv = getgenv or d.returnDummyTableFunc
 d.clonefunction = clonefunction or d.returnDummyFuncFunc
 d.cloneref = clonefunction(cloneref) or d.dummyfunc
@@ -38,12 +36,16 @@ d.rs = cloneref(game:GetService("ReplicatedStorage"))
 d.rf = cloneref(game:GetService("ReplicatedFirst"))
 d.vim = cloneref(game:GetService("VirtualInputManager"))
 d.logService = cloneref(game:GetService("LogService"))
+d.plrs = cloneref(game:GetService("Players"))
+d.plr = cloneref(d.plrs.LocalPlayer)
+d.screenX = 1920 -- hardcoded cuz screengui absolute size was fking up
+d.screenY = 1080
 
 local guiParent
 
 function d.gethui() -- for dtc shitsploits that lack gethui() or have no coregui access
     
-    if guiParent then
+    if guiParent then -- if cached then just return that
         return guiParent
     end
 
@@ -71,9 +73,7 @@ function d.gethui() -- for dtc shitsploits that lack gethui() or have no coregui
 
 end
 
--- COMPATIBILITY END
-
--- anticheat stuff
+-- console metrics stuff
 
 for i,v in getconnections(d.logService.MessageOut) do
     if v.Function or (v.Function and not d.isexecutorclosure(v.Function)) then -- if connection comes from executor then leave it alone
@@ -87,13 +87,7 @@ for i,v in getconnections(d.scriptContext.Error) do
     end
 end
 
--- ac end
-
-d.plrs = cloneref(game:GetService("Players"))
-d.plr = cloneref(d.plrs.LocalPlayer)
-
-d.screenX = 1920 -- hardcoded cuz screengui absolute size was fking up
-d.screenY = 1080
+-- console metrics end
 
 function d.antiAfk()
 
