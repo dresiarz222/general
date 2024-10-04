@@ -43,7 +43,6 @@ d.plr = cloneref(d.plrs.LocalPlayer)
 d.mouse = d.plr:GetMouse()
 d.screenX = d.mouse.ViewSizeX
 d.uis.MouseIconEnabled = true
-d.uis.MouseIcon = ""
 
 d.screenX = d.mouse.ViewSizeX
 d.screenY = d.mouse.ViewSizeY
