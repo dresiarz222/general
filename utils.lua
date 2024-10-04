@@ -47,7 +47,9 @@ d.uis.MouseIconEnabled = true
 d.screenX = d.mouse.ViewSizeX
 d.screenY = d.mouse.ViewSizeY
 
--- console metrics stuff
+-- console metrics stuff this fucks up my debugging
+
+--[[
 
 for i,v in getconnections(d.logService.MessageOut) do
     if (v.Function and not d.isexecutorclosure(v.Function)) then -- if connection comes from executor then leave it alone
@@ -60,6 +62,8 @@ for i,v in getconnections(d.scriptContext.Error) do
         v:Disable()
     end
 end
+
+]]--
 
 -- console metrics end
 
