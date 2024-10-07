@@ -30,9 +30,10 @@ d.returnDummyTableFunc = function() return {} end
 d.getgenv = getgenv or d.returnDummyTableFunc
 d.clonefunction = clonefunction or d.returnDummyFuncFunc
 d.cloneref = clonefunction(cloneref) or d.dummyfunc
-d.getconnections = clonefunction(getconnections) or d.returnDummyTableFunc
-d.hookfunction = clonefunction(hookfunction) or d.returnDummyFuncFunc
-d.hookmetamethod = clonefunction(hookmetamethod) or d.returnDummyFuncFunc
+local game = cloneref(game)
+d.getconnections = clonefunction(getconnections)
+d.hookfunction = clonefunction(hookfunction)
+d.hookmetamethod = clonefunction(hookmetamethod)
 d.scriptContext = cloneref(game:GetService("ScriptContext"))
 d.isexecutorclosure = clonefunction(isexecutorclosure)
 d.uis = cloneref(game:GetService("UserInputService"))
@@ -42,6 +43,10 @@ d.vim = cloneref(game:GetService("VirtualInputManager"))
 d.logService = cloneref(game:GetService("LogService"))
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
+d.runService = cloneref(game:GetService("RunService"))
+d.httpService = cloneref(game:GetService("HttpService"))
+d.lighting = cloneref(game:GetService("Lighting"))
+d.lighting = cloneref(game:GetService("Lighting"))
 d.runService = cloneref(game:GetService("RunService"))
 d.tweenService = cloneref(game:GetService("TweenService"))
 d.httpService = cloneref(game:GetService("HttpService"))
@@ -179,6 +184,59 @@ end
 
 function d.getPos()
     return d.plr.Character.PrimaryPart.CFrame
+end
+
+function d.sendWebhook(link, jsonpayload)
+    local s, r = pcall(function()
+        request({
+            Url = link,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = jsonpayload,
+        })
+    end)
+    if not s then
+        warn("webhook send failed", r)
+    end
+end
+
+function d.optimize(t:table) -- universal optimization t may contrain fpscap or clearTerrain boolean
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    settings().Rendering.QualityLevel = "1"
+    
+    if not t then
+        t = {}
+    end
+
+    if t.fps then
+        task.spawn(function()
+            setfpscap(t.fps)
+            while task.wait(1) do
+                setfpscap(t.fps)
+            end
+        end)
+    end
+
+    if t.clearTerrain then
+        workspace.Terrain:Clear()
+    end
+
+	sethiddenproperty(d.lighting,"Technology",2)
+	sethiddenproperty(workspace.Terrain,"Decoration",false)
+	workspace.Terrain.WaterWaveSize = 0
+	workspace.Terrain.WaterWaveSpeed = 0
+	workspace.Terrain.WaterReflectance = 0
+	workspace.Terrain.WaterTransparency = 1
+	d.lighting.GlobalShadows = 0
+	d.lighting.FogEnd = 9e9
+	d.lighting.Brightness = 0
+    d.lighting.Brightness = 0
+    d.lighting.GlobalShadows = false
+    d.lighting.ShadowSoftness = 0
+    d.lighting.EnvironmentDiffuseScale = 0
+    d.lighting.EnvironmentSpecularScale = 0
 end
 
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
