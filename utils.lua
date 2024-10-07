@@ -172,7 +172,6 @@ function d.setPos(t) -- always pcall
         
         if not t.tweenAsync then
             tween.Completed:Wait()
-            print("tween ended")
         end
 
     else
