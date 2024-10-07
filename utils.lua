@@ -153,7 +153,7 @@ function d.setPos(t) -- always pcall
         local hrp = d.plr.Character.HumanoidRootPart
         
         local tweenInfo = TweenInfo.new(
-            d.distance(hrp.Position,t.pos.Position)/t.tweenSpeed,        
+            d.distance(hrp.Position,t.pos.Position)/t.speed,      
             Enum.EasingStyle.Linear,  
             Enum.EasingDirection.Out 
         )
@@ -167,22 +167,22 @@ function d.setPos(t) -- always pcall
         tween:Play()
         
         if not t.tweenAsync then
-            tween.Completed:Wait()    
+            tween.Completed:Wait()
+            print("tween ended")
         end
 
+    else
+        d.plr.Character.PrimaryPart.CFrame = t.pos
     end
 
-    d.plr.Character.PrimaryPart.CFrame = t.pos
 end
 
 function d.getPos()
-    local s, r
-    repeat task.wait() s, r = pcall(function() return d.plr.Character.PrimaryPart.CFrame end) until s and r
-    return r
+    return d.plr.Character.PrimaryPart.CFrame
 end
 
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
 
-return d -- for loadstring :)
+return d
