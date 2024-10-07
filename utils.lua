@@ -15,6 +15,9 @@ type globals = {
     vim : VirtualInputManager,
     vu : VirtualUser,
     mouse : Mouse,
+    httpService : HttpService,
+    runService : RunService,
+    tweenService : TweenService,
 }
 
 local d : globals = {} -- for roblox lsp code auto complete
@@ -39,6 +42,9 @@ d.vim = cloneref(game:GetService("VirtualInputManager"))
 d.logService = cloneref(game:GetService("LogService"))
 d.plrs = cloneref(game:GetService("Players"))
 d.plr = cloneref(d.plrs.LocalPlayer)
+d.runService = cloneref(game:GetService("RunService"))
+d.tweenService = cloneref(game:GetService("TweenService"))
+d.httpService = cloneref(game:GetService("HttpService"))
 
 d.mouse = d.plr:GetMouse()
 d.screenX = d.mouse.ViewSizeX
@@ -136,12 +142,37 @@ function d.distance(pos1,pos2)
     return (pos2-pos1).Magnitude
 end
 
-function d.setPos(pos: CFrame | Vector3)
-    if typeof(pos) == "Vector3" then
-        pos = CFrame.new(pos)
+function d.setPos(t) -- always pcall
+
+    if typeof(t.pos) == "Vector3" then
+        t.pos = CFrame.new(t.pos)
     end
-    local s
-    repeat task.wait() s = pcall(function() d.plr.Character.PrimaryPart.CFrame = pos end) until s
+
+    if t.tween then
+
+        local hrp = d.plr.Character.HumanoidRootPart
+        
+        local tweenInfo = TweenInfo.new(
+            d.distance(hrp.Position,t.pos.Position)/t.tweenSpeed,        
+            Enum.EasingStyle.Linear,  
+            Enum.EasingDirection.Out 
+        )
+        
+        local goal = {
+            CFrame = t.pos
+        }
+        
+        local tween = d.tweenService:Create(hrp, tweenInfo, goal)
+
+        tween:Play()
+        
+        if not t.tweenAsync then
+            tween.Completed:Wait()    
+        end
+
+    end
+
+    d.plr.Character.PrimaryPart.CFrame = t.pos
 end
 
 function d.getPos()
