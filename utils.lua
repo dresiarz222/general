@@ -49,6 +49,7 @@ d.lighting = cloneref(game:GetService("Lighting"))
 d.runService = cloneref(game:GetService("RunService"))
 d.tweenService = cloneref(game:GetService("TweenService"))
 d.httpService = cloneref(game:GetService("HttpService"))
+d.vu = cloneref(game:GetService("VirtualUser"))
 
 d.mouse = d.plr:GetMouse()
 d.screenX = d.mouse.ViewSizeX
@@ -57,7 +58,7 @@ d.uis.MouseIconEnabled = true
 d.screenX = d.mouse.ViewSizeX
 d.screenY = d.mouse.ViewSizeY
 
--- console metrics stuff this fucks up my debugging
+-- console metrics stuff (some games use this), this fucks up my debugging so i commented it out for now
 
 --[[
 
@@ -115,8 +116,6 @@ function d.antiAfk()
         connection:Disable()
     end
 
-    d.vu = cloneref(game:GetService("VirtualUser"))
-
     task.spawn(function()
         while task.wait(math.random(1,6)*10) do
             
@@ -146,7 +145,7 @@ function d.distance(pos1,pos2)
     return (pos2-pos1).Magnitude
 end
 
-function d.setPos(t) -- always pcall
+function d.setPos(t) -- t = {pos, tween, tweenAsync, speed}
 
     if typeof(t.pos) == "Vector3" then
         t.pos = CFrame.new(t.pos)
@@ -172,7 +171,11 @@ function d.setPos(t) -- always pcall
         
         if not t.tweenAsync then
             tween.Completed:Wait()
+            return
         end
+
+        return tween
+
 
     else
         d.plr.Character.PrimaryPart.CFrame = t.pos
@@ -200,7 +203,7 @@ function d.sendWebhook(link, jsonpayload)
     end
 end
 
-function d.optimize(t:table) -- universal optimization t may contain fpscap or clearTerrain boolean
+function d.optimize(t:table) -- t = {fps, clearTerrain}
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
     settings().Rendering.QualityLevel = "1"
     
