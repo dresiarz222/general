@@ -200,7 +200,7 @@ function d.sendWebhook(link, jsonpayload)
     end
 end
 
-function d.optimize(t:table) -- universal optimization t may contrain fpscap or clearTerrain boolean
+function d.optimize(t:table) -- universal optimization t may contain fpscap or clearTerrain boolean
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
     settings().Rendering.QualityLevel = "1"
     
