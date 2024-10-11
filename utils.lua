@@ -49,6 +49,7 @@ d.lighting = cloneref(game:GetService("Lighting"))
 d.runService = cloneref(game:GetService("RunService"))
 d.tweenService = cloneref(game:GetService("TweenService"))
 d.httpService = cloneref(game:GetService("HttpService"))
+d.vu = cloneref(game:GetService("VirtualUser"))
 
 d.mouse = d.plr:GetMouse()
 d.screenX = d.mouse.ViewSizeX
@@ -57,7 +58,7 @@ d.uis.MouseIconEnabled = true
 d.screenX = d.mouse.ViewSizeX
 d.screenY = d.mouse.ViewSizeY
 
--- console metrics stuff this fucks up my debugging
+-- console metrics stuff (some games use this), this fucks up my debugging so i commented it out for now
 
 --[[
 
@@ -121,7 +122,7 @@ function d.distance(pos1,pos2)
     return (pos2-pos1).Magnitude
 end
 
-function d.setPos(t) -- always pcall
+function d.setPos(t) -- wrap in pcall t = {pos, tween, tweenAsync, speed}
 
     if typeof(t.pos) == "Vector3" then
         t.pos = CFrame.new(t.pos)
@@ -147,19 +148,34 @@ function d.setPos(t) -- always pcall
         
         if not t.tweenAsync then
             tween.Completed:Wait()
+            return
         end
 
+        return tween
+
+
     else
+
         d.plr.Character.PrimaryPart.CFrame = t.pos
     end
 
 end
 
-function d.getPos()
-    return d.plr.Character.PrimaryPart.CFrame
+function d.getChar(player)
+    if not player then
+        player = d.plr
+    end
+    return player.Character or player.CharacterAdded:Wait()
 end
 
-function d.sendWebhook(link, jsonpayload)
+function d.getPos(player)
+    if not player then
+        player = d.plr
+    end
+    return (player.Character or player.CharacterAdded:Wait()) and player.Character.PrimaryPart.CFrame
+end
+
+function d.sendWebhook(link, jsonpayload) -- payload has to be json encoded
     local s, r = pcall(function()
         request({
             Url = link,
@@ -175,7 +191,7 @@ function d.sendWebhook(link, jsonpayload)
     end
 end
 
-function d.optimize(t:table) -- universal optimization t may contrain fpscap or clearTerrain boolean
+function d.optimize(t) -- t = {fps, clearTerrain}
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
     settings().Rendering.QualityLevel = "1"
     
