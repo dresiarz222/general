@@ -116,6 +116,23 @@ function d.antiAfk()
         connection:Disable()
     end
 
+    d.plr.Idled:Connect(function()
+        xpcall(function()
+            d.vu:CaptureController()
+            d.vu:ClickButton2(Vector2.new())
+        end, function(...)
+            warn("antiafk 1 fail", ...)
+        end)
+
+        xpcall(function()
+            d.vu:Button2Down(Vector2.new())
+            task.wait(1)
+            d.vu:Button2Up(Vector2.new())
+        end, function(...)
+            warn("antiafk 2 fail", ...)
+        end)
+    end)
+
 end
 
 function d.distance(pos1,pos2)
