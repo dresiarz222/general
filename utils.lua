@@ -117,27 +117,21 @@ function d.antiAfk()
         connection:Disable()
     end
 
-    task.spawn(function()
-        while task.wait(math.random(1,6)*10) do
-            
-            local randomNum = math.random(1,10)
+    d.plr.Idled:Connect(function()
+        xpcall(function()
+            d.vu:CaptureController()
+            d.vu:ClickButton2(Vector2.new())
+        end, function(...)
+            warn("antiafk 1 fail", ...)
+        end)
 
-            xpcall(function()
-                d.vu:CaptureController()
-                d.vu:ClickButton2(Vector2.new(d.screenX/2+randomNum,d.screenY+randomNum))
-            end, function(...)
-                warn("antiafk 1 fail", ...)
-            end)
-    
-            xpcall(function()
-                d.vu:Button2Down(Vector2.new(d.screenX/2+randomNum,d.screenY+randomNum),workspace.CurrentCamera.CFrame)
-                task.wait(1)
-                d.vu:Button2Up(Vector2.new(d.screenX/2+randomNum,d.screenY+randomNum),workspace.CurrentCamera.CFrame)
-            end, function(...)
-                warn("antiafk 2 fail", ...)
-            end)
-
-        end
+        xpcall(function()
+            d.vu:Button2Down(Vector2.new())
+            task.wait(1)
+            d.vu:Button2Up(Vector2.new())
+        end, function(...)
+            warn("antiafk 2 fail", ...)
+        end)
     end)
 
 end
