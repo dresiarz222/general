@@ -49,6 +49,7 @@ d.lighting = cloneref(game:GetService("Lighting"))
 d.runService = cloneref(game:GetService("RunService"))
 d.tweenService = cloneref(game:GetService("TweenService"))
 d.httpService = cloneref(game:GetService("HttpService"))
+d.tpService = cloneref(game:GetService("TeleportService"))
 d.vu = cloneref(game:GetService("VirtualUser"))
 
 d.mouse = d.plr:GetMouse()
@@ -145,7 +146,7 @@ function d.distance(pos1,pos2)
     return (pos2-pos1).Magnitude
 end
 
-function d.setPos(t) -- wrap in pcall t = {pos, tween, tweenAsync, speed}
+function d.setPos(t) -- wrap in pcall t = {pos, tween, skipTweenWait, speed}
 
     if typeof(t.pos) == "Vector3" then
         t.pos = CFrame.new(t.pos)
@@ -156,7 +157,7 @@ function d.setPos(t) -- wrap in pcall t = {pos, tween, tweenAsync, speed}
         local hrp = d.plr.Character.HumanoidRootPart
         
         local tweenInfo = TweenInfo.new(
-            d.distance(hrp.Position,t.pos.Position)/t.speed,      
+            d.distance(hrp.Position,t.pos.Position)/t.speed,  
             Enum.EasingStyle.Linear,  
             Enum.EasingDirection.Out 
         )
@@ -169,7 +170,7 @@ function d.setPos(t) -- wrap in pcall t = {pos, tween, tweenAsync, speed}
 
         tween:Play()
         
-        if not t.tweenAsync then
+        if not t.skipTweenWait then
             tween.Completed:Wait()
             return
         end
