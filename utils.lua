@@ -250,6 +250,4 @@ xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
 
-print("returning")
-
 return d
