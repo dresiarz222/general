@@ -1,12 +1,8 @@
 -- Hello and welcome to my globals list :)
 
-print("waiting for game load")
-
 while not game:IsLoaded() do
     task.wait()
 end
-
-print("game loaded")
 
 type globals = {
     logService : LogService,
@@ -253,5 +249,7 @@ end
 xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
     warn("antiafk start failed", ...)
 end)
+
+print("returning")
 
 return d
