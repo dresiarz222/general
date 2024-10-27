@@ -4,23 +4,7 @@ while not game:IsLoaded() do
     task.wait()
 end
 
-type globals = {
-    logService : LogService,
-    plrs : Players,
-    plr: Player,
-    scriptContext: ScriptContext,
-    uis : UserInputService,
-    rs : ReplicatedStorage,
-    rf : ReplicatedFirst,
-    vim : VirtualInputManager,
-    vu : VirtualUser,
-    mouse : Mouse,
-    httpService : HttpService,
-    runService : RunService,
-    tweenService : TweenService,
-}
-
-local d : globals = {} -- for roblox lsp code auto complete
+local d = {} -- for roblox lsp code auto complete
 
 d.doNothing = function() end
 d.returnDummyFuncFunc = function() return function() end end
