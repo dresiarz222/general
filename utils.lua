@@ -232,8 +232,4 @@ function d.optimize(t) -- t = {fps, clearTerrain}
     d.lighting.EnvironmentSpecularScale = 0
 end
 
-xpcall(d.antiAfk,function(...) -- u pretty much always want antiafk
-    warn("antiafk start failed", ...)
-end)
-
 return d
