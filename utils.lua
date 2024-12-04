@@ -232,4 +232,6 @@ function d.optimize(t) -- t = {fps, clearTerrain}
     d.lighting.EnvironmentSpecularScale = 0
 end
 
+d.antiAfk()
+
 return d
